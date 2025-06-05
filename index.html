@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="id">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1" />  
+  <title>Brain Battle - Game Asah Otak</title>  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">  
+  <style>  
+    :root {  
+      --primary: #7f5af0;  
+      --primary-dark: #5c3ecf;  
+      --secondary: #2cb67d;  
+      --danger: #e63946;  
+      --dark: #16161a;  
+      --light: #fffffe;  
+      --gray: #94a1b2;  
+    }  * {  
+  box-sizing: border-box;  
+  margin: 0;  
+  padding: 0;  
+}  
+  
+body {  
+  font-family: 'Poppins', sans-serif;  
+  background: linear-gradient(135deg, #16161a, #242629);  
+  color: var(--light);  
+  min-height: 100vh;  
+  display: flex;  
+  justify-content: center;  
+  align-items: center;  
+  padding: 20px;  
+}  
+  
+.container {  
+  max-width: 800px;  
+  width: 100%;  
+}  
+  
+#login-screen, #game-screen {  
+  background: rgba(37, 38, 43, 0.9);  
+  border-radius: 16px;  
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);  
+  padding: 2.5rem;  
+  backdrop-filter: blur(8px);  
+  border: 1px solid rgba(255, 255, 255, 0.1);  
+  animation: fadeIn 0.5s ease-out;  
+}  
+  
+@keyframes fadeIn {  
+  from { opacity: 0; transform: translateY(20px); }  
+  to { opacity: 1; transform: translateY(0); }  
+}  
+  
+h1, h2 {  
+  color: var(--light);  
+  margin-bottom: 1.5rem;  
+  text-align: center;  
+}  
+  
+h1 {  
+  font-size: 2.2rem;  
+  background: linear-gradient(to right, var(--primary), var(--secondary));  
+  -webkit-background-clip: text;  
+  -webkit-text-fill-color: transparent;  
+}  
+  
+h2 {  
+  font-size: 1.8rem;  
+  margin-top: 2rem;  
+}  
+  
+input[type="text"], input[type="password"] {  
+  width: 100%;  
+  padding: 12px 16px;  
+  font-size: 1rem;  
+  border-radius: 8px;  
+  border: 2px solid var(--gray);  
+  background: rgba(255, 255, 255, 0.1);  
+  color: var(--light);  
+  margin: 1rem 0;  
+  transition: all 0.3s ease;  
+}  
+  
+input[type="text"]:focus, input[type="password"]:focus {  
+  border-color: var(--primary);  
+  outline: none;  
+  box-shadow: 0 0 0 3px rgba(127, 90, 240, 0.3);  
+}  
+  
+button {  
+  padding: 12px 24px;  
+  font-size: 1rem;  
+  font-weight: 600;  
+  border: none;  
+  border-radius: 8px;  
+  cursor: pointer;  
+  transition: all 0.3s ease;  
+  margin: 0.5rem;  
+  text-transform: uppercase;  
+  letter-spacing: 1px;  
+}  
+  
+.btn-primary {  
+  background-color: var(--primary);  
+  color: white;  
+}  
+  
+.btn-primary:hover {  
+  background-color: var(--primary-dark);  
+  transform: translateY(-2px);  
+  box-shadow: 0 4px 12px rgba(127, 90, 240, 0.3);  
+}  
+  
+.btn-secondary {  
+  background-color: var(--secondary);  
+  color: white;  
+}  
+  
+.btn-secondary:hover {  
+  background-color: #25a56a;  
+  transform: translateY(-2px);  
+  box-shadow: 0 4px 12px rgba(44, 182, 125, 0.3);  
+}  
+  
+.btn-tertiary {  
+  background-color: transparent;  
+  color: var(--primary);  
+  border: 2px solid var(--primary);  
+}  
+  
+.btn-tertiary:hover {  
+  background-color: rgba(127, 90, 240, 0.1);  
+}  
+  
+#points-display {  
+  font-size: 1.5rem;  
+  font-weight: bold;  
+  margin: 1.5rem 0;  
+  text-align: center;  
+  color: var(--secondary);  
+  animation: pulse 2s infinite;  
+}  
+  
+@keyframes pulse {  
+  0% { transform: scale(1); }  
+  50% { transform: scale(1.05); }  
+  100% { transform: scale(1); }  
+}  
+  
+#question-box {  
+  background: rgba(255, 255, 255, 0.05);  
+  border-radius: 12px;  
+  padding: 2rem;  
+  margin: 2rem 0;  
+  border: 1px solid rgba(255, 255, 255, 0.1);  
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  
+  transition: all 0.3s ease;  
+}  
+  
+#question-box:hover {  
+  transform: translateY(-5px);  
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);  
+}  
+  
+#question {  
+  font-size: 1.4rem;  
+  margin-bottom: 1.5rem;  
+  line-height: 1.5;  
+  color: var(--light);  
+}  
+  
+#timer {  
+  font-size: 2rem;  
+  font-weight: bold;  
+  color: var(--light);  
+  margin: 1rem 0;  
+  text-align: center;  
+  position: relative;  
+  display: inline-block;  
+  padding: 0 20px;  
+}  
+  
+#timer::before, #timer::after {  
+  content: '';  
+  position: absolute;  
+  top: 50%;  
+  width: 40px;  
+  height: 3px;  
+  background: linear-gradient(to right, var(--primary), var(--secondary));  
+}  
+  
+#timer::before {  
+  left: -40px;  
+}  
+  
+#timer::after {  
+  right: -40px;  
+}  
+  
+.timer-warning {  
+  color: var(--danger);  
+  animation: pulse 0.5s infinite alternate;  
+}  
+  
+#claim-buttons {  
+  display: flex;  
+  justify-content: center;  
+  flex-wrap: wrap;  
+  gap: 10px;  
+  margin: 1.5rem 0;  
+}  
+  
+#leaderboard {  
+  list-style: none;  
+  background: rgba(255, 255, 255, 0.05);  
+  border-radius: 12px;  
+  padding: 1.5rem;  
+  max-height: 300px;  
+  overflow-y: auto;  
+  border: 1px solid rgba(255, 255, 255, 0.1);  
+}  
+  
+#leaderboard li {  
+  padding: 12px 16px;  
+  margin: 8px 0;  
+  background: rgba(0, 0, 0, 0.2);  
+  border-radius: 8px;  
+  display: flex;  
+  justify-content: space-between;  
+  transition: all 0.3s ease;  
+}  
+  
+#leaderboard li:hover {  
+  background: rgba(127, 90, 240, 0.2);  
+  transform: translateX(5px);  
+}  
+  
+#leaderboard li.highlight {  
+  background: rgba(44, 182, 125, 0.3);  
+  font-weight: bold;  
+  border-left: 4px solid var(--secondary);  
+}  
+  
+.confetti {  
+  position: fixed;  
+  width: 10px;  
+  height: 10px;  
+  background-color: var(--primary);  
+  opacity: 0;  
+  animation: confetti 3s ease-out forwards;  
+}  
+  
+@keyframes confetti {  
+  0% {  
+    transform: translateY(0) rotate(0deg);  
+    opacity: 1;  
+  }  
+  100% {  
+    transform: translateY(100vh) rotate(720deg);  
+    opacity: 0;  
+  }  
+}  
+  
+.login-options {  
+  display: flex;  
+  justify-content: space-between;  
+  margin-top: 1rem;  
+}  
+  
+.login-options button {  
+  width: 48%;  
+}  
+  
+@media (max-width: 768px) {  
+  #login-screen, #game-screen {  
+    padding: 1.5rem;  
+  }  
+    
+  h1 {  
+    font-size: 1.8rem;  
+  }  
+    
+  #question-box {  
+    padding: 1.5rem;  
+  }  
+    
+  #claim-buttons {  
+    flex-direction: column;  
+  }  
+    
+  button {  
+    width: 100%;  
+    margin: 5px 0;  
+  }  
+    
+  .login-options {  
+    flex-direction: column;  
+  }  
+    
+  .login-options button {  
+    width: 100%;  
+    margin: 5px 0;  
+  }  
+}
+  </style>  
+</head>  
+<body>  
+  <div class="container">  
+    <div id="login-screen">  
+      <h2>Brain Battle</h2>  
+      <input type="text" id="username" placeholder="Nama Genius Anda" />  
+      <input type="password" id="password" placeholder="Kata Sandi" />  
+      <div class="login-options">  
+        <button class="btn-primary" onclick="login()">Masuk</button>  
+        <button class="btn-tertiary" onclick="createGenius()">Create Genius</button>  
+      </div>  
+    </div>  
+
+    <div id="game-screen" style="display:none;">  
+      <h1>Selamat datang, <span id="player-name"></span>!</h1>  
+        
+      <div id="points-display">Point: <span id="points"></span></div>  
+        
+      <div id="question-box">  
+        <div id="timer">10</div>  
+        <p id="question"></p>  
+        <input type="text" id="answer" placeholder="Jawaban Anda" />  
+        <button class="btn-primary" onclick="submitAnswer()">Jawab</button>  
+      </div>  
+
+      <div id="claim-buttons">  
+        <button class="btn-secondary" onclick="claim('daily')">Klaim Harian</button>  
+        <button class="btn-secondary" onclick="claim('weekly')">Klaim Mingguan</button>  
+        <button class="btn-secondary" onclick="claim('monthly')">Klaim Bulanan</button>  
+      </div>  
+
+      <h2>Leaderboard</h2>  
+      <ol id="leaderboard"></ol>  
+    </div>
+  </div>  
+
+  <script>  
+    const questions = [  
+      { q: '5 + 3 = ?', a: '8' },  
+      { q: 'Apa kebalikan dari kata "besar"?', a: 'kecil' },  
+      { q: 'Huruf apa yang ada di awal kata "aku"?', a: 'a' },  
+      { q: '10 - 4 = ?', a: '6' },  
+      { q: 'Lanjutkan pola: 2, 4, 6, ?', a: '8' },  
+      { q: 'Jumlah huruf dalam kata "program"?', a: '7' },  
+      { q: 'Apa warna campuran merah dan biru?', a: 'ungu' },  
+      { q: 'Apa bahasa Inggris dari "apel"?', a: 'apple' },  
+      { q: '2 x 6 = ?', a: '12' },  
+      { q: 'Huruf terakhir dari kata "sakit"?', a: 't' },  
+      { q: 'Akar kuadrat dari 144 adalah?', a: '12' },  
+      { q: 'Berapa hasil dari 3! (3 faktorial)?', a: '6' },  
+      { q: 'Ibukota negara Jepang adalah?', a: 'tokyo' },  
+      { q: 'Elemen kimia dengan simbol Fe adalah?', a: 'besi' },  
+      { q: 'Planet terdekat dari matahari adalah?', a: 'merkuri' },  
+      { q: 'Konversi 1010 (biner) ke desimal adalah?', a: '10' },  
+      { q: 'Penulis novel "Laskar Pelangi"?', a: 'andrea hirata' },  
+      { q: 'Tanggal proklamasi kemerdekaan Indonesia?', a: '17 agustus 1945' },  
+      { q: '5² + 12² = ?', a: '169' },  
+      { q: 'Negara terkecil di dunia?', a: 'vatican' },  
+      { q: 'Logaritma basis 10 dari 100 adalah?', a: '2' },  
+      { q: 'Jumlah sisi pada heksagon?', a: '6' },  
+      { q: 'Penemu teori relativitas?', a: 'albert einstein' },  
+      { q: 'Konversi 25°C ke Fahrenheit? (hanya angka)', a: '77' },  
+      { q: 'Lawan kata dari "sinonim"?', a: 'antonim' },  
+      { q: 'Ibukota provinsi Jawa Barat?', a: 'bandung' },  
+      { q: 'Hasil dari 1/2 + 1/4 adalah? (format: x/y)', a: '3/4' },  
+      { q: 'Tokoh wayang yang dikenal sebagai punakawan?', a: 'semar' },  
+      { q: 'Jumlah provinsi di Indonesia saat ini? (2023)', a: '38' },  
+      { q: 'Nama lain dari segitiga sama sisi?', a: 'equilateral' }  
+    ];  
+
+    // Data storage functions
+    async function saveData(data) {
+      try {
+        // Save to localStorage as fallback
+        localStorage.setItem('brainBattleData', JSON.stringify(data));
+        
+        // Save to Vercel serverless function
+        const response = await fetch('/api/saveData', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ data })
+        });
+        
+        if (!response.ok) {
+          console.error('Failed to save data to server');
+        }
+      } catch (error) {
+        console.error('Error saving data:', error);
+      }
+    }
+    
+    async function loadData() {
+      try {
+        // First try to load from server
+        const response = await fetch('/api/getData');
+        if (response.ok) {
+          const serverData = await response.json();
+          if (serverData) {
+            // Also save to localStorage for offline use
+            localStorage.setItem('brainBattleData', JSON.stringify(serverData));
+            return serverData;
+          }
+        }
+        
+        // Fallback to localStorage if server fails
+        const localData = localStorage.getItem('brainBattleData');
+        return localData ? JSON.parse(localData) : { users: [], leaderboard: [] };
+      } catch (error) {
+        console.error('Error loading data:', error);
+        const localData = localStorage.getItem('brainBattleData');
+        return localData ? JSON.parse(localData) : { users: [], leaderboard: [] };
+      }
+    }
+    
+    function getTodayDate() {  
+      return new Date().toISOString().slice(0,10);  
+    }  
+      
+    function getWeekNumber(d = new Date()) {  
+      d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));  
+      const dayNum = d.getUTCDay() || 7;  
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);  
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));  
+      return Math.ceil((((d - yearStart) / 86400000) + 1)/7);  
+    }  
+      
+    function getMonthYear() {  
+      const d = new Date();  
+      return `${d.getFullYear()}-${d.getMonth() + 1}`;  
+    }  
+
+    let data = { users: [], leaderboard: [] };
+    let currentUser = null;  
+    let currentQuestionIndex = 0;  
+    let timer;  
+    let timeLeft = 10;  
+
+    // Initialize data on load
+    window.addEventListener('DOMContentLoaded', async () => {
+      data = await loadData();
+    });
+
+    function createConfetti() {  
+      for (let i = 0; i < 50; i++) {  
+        const confetti = document.createElement('div');  
+        confetti.className = 'confetti';  
+        confetti.style.left = `${Math.random() * 100}vw`;  
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;  
+        confetti.style.width = `${Math.random() * 10 + 5}px`;  
+        confetti.style.height = `${Math.random() * 10 + 5}px`;  
+        confetti.style.animationDuration = `${Math.random() * 2 + 2}s`;  
+        document.body.appendChild(confetti);  
+          
+        setTimeout(() => {  
+          confetti.remove();  
+        }, 3000);  
+      }  
+    }  
+
+    function startTimer() {  
+      clearInterval(timer);  
+      timeLeft = 10;  
+      document.getElementById('timer').textContent = timeLeft;  
+      document.getElementById('timer').classList.remove('timer-warning');  
+        
+      timer = setInterval(() => {  
+        timeLeft--;  
+        document.getElementById('timer').textContent = timeLeft;  
+          
+        if (timeLeft <= 3) {  
+          document.getElementById('timer').classList.add('timer-warning');  
+        }  
+          
+        if (timeLeft <= 0) {  
+          clearInterval(timer);  
+          alert('Waktu habis! Soal dilewati.');  
+          loadQuestion();  
+        }  
+      }, 1000);  
+    }  
+
+    async function createGenius() {  
+      const username = document.getElementById('username').value.trim();  
+      const password = document.getElementById('password').value;  
+        
+      if (!username || !password) {  
+        alert('Nama Genius dan kata sandi wajib diisi!');  
+        return;  
+      }  
+
+      const userExists = data.users.some(u => u.username.toLowerCase() === username.toLowerCase());  
+        
+      if (userExists) {  
+        alert('Nama Genius sudah digunakan!');  
+        return;  
+      }  
+
+      const newUser = {  
+        username,  
+        password,  
+        points: 0,  
+        lastClaim: { daily: null, weekly: null, monthly: null }  
+      };  
+        
+      data.users.push(newUser);  
+      await saveData(data);  
+        
+      alert('Akun Genius berhasil dibuat! Silakan masuk.');  
+    }  
+
+    async function login() {  
+      const username = document.getElementById('username').value.trim();  
+      const password = document.getElementById('password').value;  
+        
+      if (!username || !password) {  
+        alert('Nama Genius dan kata sandi wajib diisi!');  
+        return;  
+      }  
+
+      const user = data.users.find(u => u.username.toLowerCase() === username.toLowerCase());  
+        
+      if (!user) {  
+        alert('Nama Genius tidak ditemukan!');  
+        return;  
+      }  
+
+      if (user.password !== password) {  
+        alert('Kata sandi salah!');  
+        return;  
+      }  
+
+      currentUser = user;  
+      document.getElementById('player-name').textContent = currentUser.username;  
+      document.getElementById('login-screen').style.display = 'none';  
+      document.getElementById('game-screen').style.display = 'block';  
+
+      updatePoints();  
+      loadQuestion();  
+      updateLeaderboard();  
+    }  
+
+    function loadQuestion() {  
+      clearInterval(timer);  
+      currentQuestionIndex = Math.floor(Math.random() * questions.length);  
+      document.getElementById('question').textContent = questions[currentQuestionIndex].q;  
+      document.getElementById('answer').value = '';  
+      document.getElementById('answer').focus();  
+      startTimer();  
+    }  
+
+    async function submitAnswer() {  
+      clearInterval(timer);  
+      const answerInput = document.getElementById('answer').value.trim().toLowerCase();  
+      const correctAnswer = questions[currentQuestionIndex].a.toLowerCase();  
+
+      if (!answerInput) {  
+        alert('Jawaban tidak boleh kosong!');  
+        startTimer();  
+        return;  
+      }  
+
+      if (answerInput === correctAnswer) {  
+        const timeBonus = Math.floor(timeLeft * 0.5);  
+        const totalPoints = 10 + timeBonus;  
+          
+        alert(`Jawaban benar! +10 point + ${timeBonus} bonus waktu = ${totalPoints} point`);  
+        currentUser.points += totalPoints;  
+          
+        if (timeBonus > 4) {  
+          createConfetti();  
+        }  
+      } else {  
+        alert(`Jawaban salah! Jawaban yang benar: ${questions[currentQuestionIndex].a}`);  
+      }  
+        
+      await saveData(data);  
+      updatePoints();  
+      updateLeaderboard();  
+      loadQuestion();  
+      simulateBotCompetition();  
+    }  
+
+    function updatePoints() {  
+      document.getElementById('points').textContent = currentUser.points;  
+    }  
+
+    async function claim(type) {  
+      const today = getTodayDate();  
+      const week = getWeekNumber();  
+      const month = getMonthYear();  
+
+      let claimed = false;  
+      let points = 0;  
+      let message = '';  
+
+      if (type === 'daily' && currentUser.lastClaim.daily !== today) {  
+        points = 5;  
+        message = 'Klaim harian berhasil! +5 point';  
+        currentUser.lastClaim.daily = today;  
+        claimed = true;  
+      } else if (type === 'weekly' && currentUser.lastClaim.weekly !== week) {  
+        points = 20;  
+        message = 'Klaim mingguan berhasil! +20 point';  
+        currentUser.lastClaim.weekly = week;  
+        claimed = true;  
+      } else if (type === 'monthly' && currentUser.lastClaim.monthly !== month) {  
+        points = 50;  
+        message = 'Klaim bulanan berhasil! +50 point';  
+        currentUser.lastClaim.monthly = month;  
+        claimed = true;  
+      }  
+
+      if (claimed) {  
+        currentUser.points += points;  
+        await saveData(data);  
+        updatePoints();  
+        updateLeaderboard();  
+        alert(message);  
+        createConfetti();  
+      } else {  
+        alert(`Anda sudah klaim ${type} ini!`);  
+      }  
+    }  
+
+    function updateLeaderboard() {  
+      const bots = generateBots();  
+      const combined = [...data.users, ...bots];  
+
+      combined.sort((a,b) => b.points - a.points);  
+      data.users = combined.filter(u => !u.isBot);  
+
+      const lb = document.getElementById('leaderboard');  
+      lb.innerHTML = '';  
+        
+      combined.slice(0, 100).forEach((u, i) => {  
+        const li = document.createElement('li');  
+        li.textContent = `${u.username} - ${u.points} point`;  
+          
+        if (currentUser && u.username.toLowerCase() === currentUser.username.toLowerCase()) {  
+          li.classList.add('highlight');  
+        }  
+          
+        lb.appendChild(li);  
+      });  
+    }  
+
+    const botNames = [  
+      "Rafi", "Dian", "Lila", "Agus", "Mira", "Budi", "Nina", "Raka", "Sari", "Tono",  
+      "Vira", "Hadi", "Joko", "Lina", "Gilang", "Maya", "Putri", "Dedi", "Novi", "Rian"  
+    ];  
+
+    function generateBots() {  
+      return botNames.slice(0, 10).map(name => {  
+        let bot = data.leaderboard.find(b => b.username === name);  
+          
+        if (!bot) {  
+          bot = {  
+            username: name,  
+            points: 30 + Math.floor(Math.random() * 40),  
+            isBot: true  
+          };  
+          data.leaderboard.push(bot);  
+        }  
+          
+        return bot;  
+      });  
+    }  
+
+    async function simulateBotCompetition() {  
+      const bots = generateBots();  
+
+      bots.forEach(bot => {  
+        bot.points += Math.floor(Math.random() * 11);  
+      });  
+
+      const beatenBots = bots.filter(bot => bot.points < currentUser.points);  
+      if (beatenBots.length > 0) {  
+        currentUser.points += Math.floor(Math.max(...beatenBots.map(b => b.points)) / 2);  
+      }  
+
+      data.leaderboard = bots;  
+      await saveData(data);  
+
+      updateLeaderboard();  
+      updatePoints();  
+    }  
+  </script>  
+</body>  
+</html>
