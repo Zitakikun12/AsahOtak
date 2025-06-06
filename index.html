@@ -360,17 +360,71 @@
     const database = firebase.database();
 
     const questions = [
-      { q: '5 + 3 = ?', a: '8' },
-      { q: 'Apa kebalikan dari kata "besar"?', a: 'kecil' },
-      { q: 'Huruf apa yang ada di awal kata "aku"?', a: 'a' },
-      { q: '10 - 4 = ?', a: '6' },
-      { q: 'Lanjutkan pola: 2, 4, 6, ?', a: '8' },
-      { q: 'Jumlah huruf dalam kata "program"?', a: '7' },
-      { q: 'Apa warna campuran merah dan biru?', a: 'ungu' },
-      { q: 'Apa bahasa Inggris dari "apel"?', a: 'apple' },
-      { q: '2 x 6 = ?', a: '12' },
-      { q: 'Huruf terakhir dari kata "sakit"?', a: 't' }
-    ];
+  { q: '5 x 25 = ?', a: '125' },
+  { q: 'Apa kebalikan dari kata "besar"?', a: 'kecil' },
+  { q: 'Huruf apa yang ada di awal kata "aku"?', a: 'a' },
+  { q: '10 - 4 = ?', a: '6' },
+  { q: 'Lanjutkan pola: 2, 4, 6, ?', a: '8' },
+  { q: 'Jumlah huruf dalam kata "program"?', a: '7' },
+  { q: 'Apa warna campuran merah dan biru?', a: 'ungu' },
+  { q: 'Apa bahasa Inggris dari "apel"?', a: 'apple' },
+  { q: '2 x 6 = ?', a: '12' },
+  { q: 'Huruf terakhir dari kata "sakit"?', a: 't' },
+  { q: '7 + 8 = ?', a: '15' },
+  { q: 'Apa lawan kata "panjang"?', a: 'pendek' },
+  { q: 'Huruf ke-3 dari kata "belajar"?', a: 'l' },
+  { q: '15 ÷ 3 = ?', a: '5' },
+  { q: 'Lanjutkan pola: 1, 3, 5, 7, ?', a: '9' },
+  { q: 'Jumlah huruf dalam kata "komputer"?', a: '8' },
+  { q: 'Apa warna campuran kuning dan merah?', a: 'oranye' },
+  { q: 'Apa bahasa Inggris dari "pisang"?', a: 'banana' },
+  { q: '9 - 3 = ?', a: '6' },
+  { q: 'Huruf pertama dari kata "rumah"?', a: 'r' },
+  { q: '3 x 4 = ?', a: '12' },
+  { q: 'Apa lawan kata "dingin"?', a: 'panas' },
+  { q: 'Huruf terakhir dari kata "bunga"?', a: 'a' },
+  { q: 'Lanjutkan pola: 5, 10, 15, ?', a: '20' },
+  { q: '7 x 7 = ?', a: '49' },
+  { q: 'Apa bahasa Inggris dari "air"?', a: 'water' },
+  { q: 'Huruf ke-2 dari kata "mata"?', a: 'a' },
+  { q: '20 - 9 = ?', a: '11' },
+  { q: 'Jumlah huruf dalam kata "bahagia"?', a: '7' },
+
+  // Soal deduksi dan logika
+  { q: 'Seseorang melihat ke cermin, dan dia melihat seseorang yang sama persis dengannya. Siapa yang dia lihat?', a: 'dirinya sendiri' },
+  { q: 'Semua burung bisa terbang. Ayam adalah burung. Apakah ayam bisa terbang tinggi?', a: 'tidak' },
+  { q: 'Jika A lebih tinggi dari B, dan B lebih tinggi dari C, siapa yang paling pendek?', a: 'C' },
+  { q: 'Di kebun ada 3 ekor kambing dan 2 ekor domba. Berapa jumlah kaki semua hewan?', a: '20' },
+  { q: 'Jika hari ini hari Rabu, maka 3 hari yang lalu hari apa?', a: 'minggu' },
+  { q: 'Ibu lebih tua dari ayah. Ayah lebih tua dari kakak. Siapa yang paling muda?', a: 'kakak' },
+
+  // Soal perandaian / situasi
+  { q: 'Jika kamu punya 10.000 dan membeli roti seharga 3.500, berapa sisa uangmu?', a: '6500' },
+  { q: 'Kamu datang ke sekolah jam 6.50. Bel masuk pukul 7.00. Berapa menit kamu menunggu?', a: '10' },
+  { q: 'Kamu punya 3 pensil, temanmu meminjam 2, lalu satunya hilang. Berapa pensil yang kamu miliki sekarang?', a: '0' },
+  { q: 'Jika kamu membaca buku 10 halaman per hari, berapa hari kamu butuh untuk membaca 50 halaman?', a: '5' },
+  { q: 'Jika kamu punya dua apel dan memberikan satu kepada temanmu, berapa yang tersisa?', a: '1' },
+
+  // Soal logika cerita pendek
+  { q: 'Ani, Budi, dan Cici berdiri berurutan. Ani di depan Cici. Budi di belakang Ani. Siapa yang di tengah?', a: 'budi' },
+  { q: 'Sebuah bus membawa 10 penumpang. Di halte pertama 3 turun, 5 naik. Sekarang ada berapa penumpang?', a: '12' },
+  { q: 'Ayah adalah anak dari kakek. Kakek adalah ayah dari ibu. Maka ibu dan ayah adalah?', a: 'suami istri' },
+
+  // Analisis sederhana
+  { q: 'Jika semua kucing adalah hewan, dan hewan suka makan, apakah kucing suka makan?', a: 'ya' },
+  { q: 'Jika kamu tidur pukul 22.00 dan bangun pukul 06.00, berapa lama kamu tidur?', a: '8' },
+  { q: 'Kamu punya 4 kelereng merah dan 6 kelereng biru. Mana yang lebih banyak?', a: 'biru' },
+
+  // Soal observasi
+  { q: 'Kata "kesetiaan", huruf keempatnya apa?', a: 'e' },
+  { q: 'Huruf vokal ke-2 dalam kata "komputer"?', a: 'u' },
+  { q: 'Dalam kata "perpustakaan", berapa huruf "a" yang muncul?', a: '3' },
+
+  // Perbandingan
+  { q: 'Mana yang lebih besar: 3/4 atau 2/3?', a: '3/4' },
+  { q: 'Angka manakah yang tidak genap: 2, 4, 7, 8?', a: '7' },
+  { q: 'Kalau 1 lusin itu 12, maka setengah lusin adalah?', a: '6' }
+];
 
     function saveData(data) {
       database.ref('users').set(data.users);
